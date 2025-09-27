@@ -12,7 +12,7 @@ list_sessions() {
 
 format_session() {
     local line="$1"
-    local name ts date_str marker
+    local name ts date_str marker smarker
 
     current_session=""
     [ -n "$TMUX" ] && current_session=$(tmux display-message -p '#S')
@@ -20,10 +20,19 @@ format_session() {
     name=$(echo "$line" | awk '{print $1}')
     ts=$(echo "$line" | grep -oP '\d{10}')
     date_str=$(date -d @"$ts" '+%b %d %Y %H:%M' 2>/dev/null || echo "")
+
+    # attached marked in existing session if you are attach to it
     marker=""
     [ "$name" == "$current_session" ] && marker="[attached]"
 
-    echo "$name (created: $date_str) $marker"
+    # Check if session has multiple panes in any window
+    if tmux list-windows -t "$name" -F "#{window_panes}" | grep -q '[2-9]'; then
+        smarker="[Z]"
+    else
+        smarker=""
+    fi
+
+    echo "$name (created: $date_str) $marker $smarker"
 }
 
 session_exists() {
@@ -31,12 +40,22 @@ session_exists() {
 }
 
 # -------------------------------
+# Exclude Directories Mention
+# -------------------------------
+EXCLUDE_DIRS=(~/.cache ~/.rustup ~/.npm ~/.zen ~/.linuxmint ~/.icons ~/Desktop ~/.cargo ~/.mozilla ~/.themes)
+
+# Build find exclude arguments
+exclude_args=""
+for d in "${EXCLUDE_DIRS[@]}"; do
+    exclude_args+=" -not -path '$d*'"
+done
+
+# -------------------------------
 # BUILD MENU
 # -------------------------------
 
 # Existing sessions
 sessions=""
-# existing=$(list_sessions | sort)
 existing=$(list_sessions | sort -t: -k2,2n)
 if [ -n "$existing" ]; then
     while read -r line; do
@@ -45,8 +64,12 @@ if [ -n "$existing" ]; then
 fi
 
 # Directories
-dirs=$(find ~ -mindepth 1 -maxdepth 2 -type d -not -path '*/\.git*' 2>/dev/null)
+# dirs=$(find ~ -mindepth 1 -maxdepth 2 -type d -not -path '*/\.git*' 2>/dev/null)
+dirs=$(eval "find ~ -mindepth 1 -maxdepth 2 -type d -not -path '*/\.git*' $exclude_args 2>/dev/null")
 
+# ---------------
+# Menu
+# ---------------
 menu="$sessions
 [Home]
 [Delete]
@@ -67,7 +90,6 @@ selected=$(echo -e "$menu" | fzf \
 # -------------------------------
 # HANDLE SELECTION
 # -------------------------------
-
 if [[ "$selected" == "[Home]" ]]; then
     session_name="home"
     if session_exists "$session_name"; then
