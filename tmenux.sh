@@ -32,7 +32,8 @@ format_session() {
         smarker=""
     fi
 
-    echo "$name (created: $date_str) $marker $smarker"
+    printf "%-20s %-22s %s %s\n" "$name" "(created: $date_str)" "$marker" "$smarker"
+    # echo "$name (created: $date_str) $marker $smarker"
 }
 
 session_exists() {
@@ -64,7 +65,6 @@ if [ -n "$existing" ]; then
 fi
 
 # Directories
-# dirs=$(find ~ -mindepth 1 -maxdepth 2 -type d -not -path '*/\.git*' 2>/dev/null)
 dirs=$(eval "find ~ -mindepth 1 -maxdepth 2 -type d -not -path '*/\.git*' $exclude_args 2>/dev/null")
 
 # ---------------

@@ -3,14 +3,14 @@
 1. what is tmenux ?
 
 - tmenux is a successor of [Tmenu](https://github.com/hellopradeep69/Tmenu.git) .
-- it works the same but with lil different change mention below
+- it works the same but with lil change mention below
 - feel free to try/checkout Tmenu too .
 
 2. how is it different from tmenu ?
 
 - templates feature is removed cuz i never used it instead we have like [Home]
 - session from directory is now not a submenu , its build in (just like Tmux-sessionzer)
-- delete feature still , if exist you wanna delete a bunch of tmux in one go .
+- delete feature still exist , incase you wanna delete a bunch of tmux server in one go .
 - rest are somewhat same
 
 ---
@@ -60,6 +60,6 @@ bind-key f run-shell "tmux neww -n 'Tmenu' ~/.local/bin/tmenux.sh"
 ```
 
 - prefix + f opens the tmenu so you dont have to type it every time you want to open it
-- prefix default it ctrl + b. [weird]
+- prefix default is ctrl + b. [weird]
 
 ---
