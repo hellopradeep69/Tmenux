@@ -10,6 +10,9 @@ list_sessions() {
     tmux list-sessions -F "#{session_name} (#{windows} windows, created: #{session_created})" 2>/dev/null || true
 }
 
+# -------------------------------
+# FORMAT SESSION
+# -------------------------------
 format_session() {
     local line="$1"
     local name ts date_str marker smarker
@@ -20,6 +23,9 @@ format_session() {
     name=$(echo "$line" | awk '{print $1}')
     ts=$(echo "$line" | grep -oP '\d{10}')
     date_str=$(date -d @"$ts" '+%b %d %Y %H:%M' 2>/dev/null || echo "")
+
+    # Count total panes across all windows
+    total_panes=$(tmux list-windows -t "$name" -F "#{window_panes}" 2>/dev/null | awk '{s+=$1} END{print s}')
 
     # attached marked in existing session if you are attach to it
     marker=""
@@ -32,8 +38,7 @@ format_session() {
         smarker=""
     fi
 
-    printf "%-20s %-22s %s %s\n" "$name" "(created: $date_str)" "$marker" "$smarker"
-    # echo "$name (created: $date_str) $marker $smarker"
+    printf "%-15s [%d pane(s)] %s %s\n" "$name" "$total_panes" "$marker" "$smarker"
 }
 
 session_exists() {

@@ -51,6 +51,51 @@ chmod +x ~/.local/bin/tmenu.sh
 
 ---
 
+### Customizability
+
+1. Exclude Directory
+
+- You can exclude dir that you dont want to include in the script .
+- Default is given below . you can add more in the script .
+- Exclude dir section is under "Exclude Directories Mention"
+
+```bash
+EXCLUDE_DIRS=(~/.cache ~/.rustup ~/.npm ~/.zen ~/.linuxmint ~/.icons ~/Desktop ~/.cargo ~/.mozilla ~/.themes)
+```
+
+2. Session Overview
+
+- You can change the existing session Overview in script
+- Predefined variable are available in the script
+- Session Overview section under "FORMAT SESSION"
+- - Default
+
+```bash
+    printf "%-20s [%d pane(s)] %s %s\n" "$name" "$total_panes" "$marker" "$smarker"
+```
+
+- Example
+
+1. simple
+
+```bash
+    echo "$name (created: $date_str) $marker $smarker"
+```
+
+2. with date and marker like attatched and spilt-panes
+
+```bash
+    printf "%-20s %-22s %s %s\n" "$name" "(created: $date_str)" "$marker" "$smarker"
+```
+
+or
+
+```bash
+    printf "%-13s %-28s %s %s\n" "$name" "(created: $date_str)" "$marker" "$smarker"
+```
+
+---
+
 #### keybind (shortcuts)
 
 - add in your .tmux.conf
