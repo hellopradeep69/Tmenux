@@ -38,6 +38,7 @@ format_session() {
         smarker=""
     fi
 
+    # session overview
     printf "%-15s [%d pane(s)] %s %s\n" "$name" "$total_panes" "$marker" "$smarker"
 }
 
