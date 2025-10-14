@@ -7,7 +7,7 @@
 # -------------------------------
 
 list_sessions() {
-    tmux list-sessions -F "#{session_name} (#{windows} windows, created: #{session_created})" 2>/dev/null || true
+    tmux list-sessions -F "#{session_name}" 2>/dev/null || true
 }
 
 # -------------------------------
@@ -112,6 +112,7 @@ elif [[ "$selected" == "[Delete]" ]]; then
 
         del_session=$(
             tmux list-sessions -F "#{session_name} (#{windows} windows, created: #{session_created})" |
+                sort -t: -k2,2n |
                 while read -r line; do
                     format_session "$line"
                 done | fzf --prompt="Select session to delete (q to quit): " \
