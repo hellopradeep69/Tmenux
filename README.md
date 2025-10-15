@@ -108,3 +108,10 @@ bind-key f run-shell "tmux neww -n 'Tmenu' ~/.local/bin/tmenux.sh"
 - prefix default is ctrl + b. [weird]
 
 ---
+
+> [!NOTE]
+> I think
+> tmenux have reached its potential and will not have new featured further.
+> Explore more script i have created  
+> [topen](https://github.com/hellopradeep69/topen.git)
+> Thank You !
